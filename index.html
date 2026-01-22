@@ -79,40 +79,42 @@
                         ]
                     }
                 },
-                            'A1': {
-                title: "The Greenhouse",
-                age: 8,
-                context: "You are stood in the greenhouse of Grand-mère Anne-Jo's garden, and you smile as a ray of spring sunshine strokes your cheek with warmth. A ladybird, newly awake from its winter sleep, suddenly lands on the same cheek. Caught off guard and unaware of what it is, you slap it off, only to see it lie dead in the soil at your feet. ",
-                question: "How will you deal with this new innocent death?",
-                options: [
-                    { id: 'A1-1', label: "The Pessimistic", text: "You drop to your knees in floods of tears crying 'I'm useless.'" },
-                    { id: 'B1-1', label: "The Sanguine", text: "You are becoming inured to death even at this tender age." },
-                    { id: 'C1-1', label: "The Empathetic", text: "You pick up the dead ladybird and consider the ephemerality of all life. " }
-                ]
-            },
-                            'B1': {
-                title: "Atmosphere",
-                age: 8,
-                context: "'Don't walk away, in silence.' So sings Ian Curtis in his unique tenor voice in the Joy Division's song, 'Atmosphere'. You are listening to your dead parent's record collection in order to get to know them. ",
-                question: "What effect does this song have on you?",
-                options: [
-                    { id: 'A1-1', label: "The Thoughtful", text: "You recognise in the melancholy their understanding of the world's true nature." },
-                    { id: 'B1-1', label: "The Optimistic", text: "You feel that you can come to know your parents in spite of their absence." },
-                    { id: 'C1-1', label: "The Child", text: "You are confused by the words and sounds, and turn the Hi-Fi off." }
-                ]
-            },
-                            'C1': {
-                title: "Maths",
-                age: 8,
-                context: "At school, the maths teacher suggests that mathematics is the only language worth learning. It cannot lie. 2 plus 2 will only ever equal 4. It can even explain the beautiful spiral of a snail's shell. ",
-                question: "Are you impressed by this rhetoric?",
-                options: [
-                    { id: 'A1-1', label: "The Scientific", text: "You sense there is an underlying truth to his words, and decide to work harder in maths." },
-                    { id: 'B1-1', label: "The Poetic", text: "You feel that even if true, maths would be a poor language to learn, as it renders beautiful things as mere calculation. Words, pictures, and music are preferable" },
-                    { id: 'C1-1', label: "The Skeptic", text: "You smile inside at the ridiculous idea. As if." }
-                ]
-            }
-                
+                }, // <-- Notice this comma
+    3: { // <-- NEW: You must wrap Day 3 choices in this number block
+        'A1': {
+            title: "The Greenhouse",
+            age: 8,
+            context: "You are stood in the greenhouse of Grand-mère Anne-Jo's garden...",
+            question: "How will you deal with this new innocent death?",
+            options: [
+                { id: 'A1-1', label: "The Pessimistic", text: "You drop to your knees in floods of tears crying 'I'm useless.'" },
+                { id: 'B1-1', label: "The Sanguine", text: "You are becoming inured to death even at this tender age." },
+                { id: 'C1-1', label: "The Empathetic", text: "You pick up the dead ladybird and consider the ephemerality of all life. " }
+            ]
+        },
+        'B1': {
+            title: "Atmosphere",
+            age: 8,
+            context: "'Don't walk away, in silence.' So sings Ian Curtis in his unique tenor voice...",
+            question: "What effect does this song have on you?",
+            options: [
+                { id: 'A1-1', label: "The Thoughtful", text: "You recognise in the melancholy their understanding of the world's true nature." },
+                { id: 'B1-1', label: "The Optimistic", text: "You feel that you can come to know your parents in spite of their absence." },
+                { id: 'C1-1', label: "The Child", text: "You are confused by the words and sounds, and turn the Hi-Fi off." }
+            ]
+        },
+        'C1': {
+            title: "Maths",
+            age: 8,
+            context: "At school, the maths teacher suggests that mathematics is the only language worth learning...",
+            question: "Are you impressed by this rhetoric?",
+            options: [
+                { id: 'A1-1', label: "The Scientific", text: "You sense there is an underlying truth to his words, and decide to work harder in maths." },
+                { id: 'B1-1', label: "The Poetic", text: "You feel that even if true, maths would be a poor language to learn, as it renders beautiful things as mere calculation." },
+                { id: 'C1-1', label: "The Skeptic", text: "You smile inside at the ridiculous idea. As if." }
+            ]
+        }
+    } // <-- Close Day 3
             };
 
             const advanceDay = () => {
