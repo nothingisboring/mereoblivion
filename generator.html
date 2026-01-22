@@ -2,81 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>D&V Narrative Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&V | Narrative Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>body { background: #f4f4f5; font-family: sans-serif; }</style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+        h1 { font-family: 'Playfair Display', serif; }
+    </style>
 </head>
-<body class="p-8">
-    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
-        <h1 class="text-2xl font-bold mb-6">D&V Content Generator</h1>
-        
-        <div class="grid gap-4 mb-8">
-            <div>
-                <label class="block text-sm font-bold mb-1">Parent Choice ID (e.g., A1 or B3)</label>
-                <input id="parentId" type="text" placeholder="Which choice leads to this?" class="w-full p-2 border rounded">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
+<body class="bg-stone-100 min-h-screen py-12 px-4">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-stone-200">
+        <div class="bg-black p-6 text-white">
+            <h1 class="text-3xl">Narrative Branch Generator</h1>
+            <p class="text-stone-400 text-sm font-mono mt-2 uppercase tracking-widest">Death & the Vegan Content Tool</p>
+        </div>
+
+        <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <h2 class="font-bold border-b pb-2 text-stone-800 uppercase text-xs tracking-wider">Chapter Details</h2>
+                
                 <div>
-                    <label class="block text-sm font-bold mb-1">Target Day</label>
-                    <input id="day" type="number" value="3" class="w-full p-2 border rounded">
+                    <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Parent Choice ID (The Trigger)</label>
+                    <input id="parentId" type="text" placeholder="e.g., A or B1" class="w-full p-3 bg-stone-50 border rounded-lg focus:ring-2 focus:ring-black outline-none transition-all">
+                    <p class="text-[10px] text-stone-400 mt-1 italic">What was the ID of the choice clicked yesterday?</p>
                 </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Target Day</label>
+                        <input id="day" type="number" value="3" class="w-full p-3 bg-stone-50 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Margot's Age</label>
+                        <input id="age" type="number" value="12" class="w-full p-3 bg-stone-50 border rounded-lg">
+                    </div>
+                </div>
+
                 <div>
-                    <label class="block text-sm font-bold mb-1">Margot's Age</label>
-                    <input id="age" type="number" value="12" class="w-full p-2 border rounded">
+                    <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Chapter Title</label>
+                    <input id="title" type="text" placeholder="The Glass House" class="w-full p-3 bg-stone-50 border rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Context (Story Text)</label>
+                    <textarea id="context" rows="4" placeholder="Describe the scene..." class="w-full p-3 bg-stone-50 border rounded-lg"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-stone-500 mb-1">The Question</label>
+                    <input id="question" type="text" placeholder="What happens next?" class="w-full p-3 bg-stone-50 border rounded-lg">
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-bold mb-1">Chapter Title</label>
-                <input id="title" type="text" placeholder="The Glass House" class="w-full p-2 border rounded">
-            </div>
-            <div>
-                <label class="block text-sm font-bold mb-1">Context / Story Text</label>
-                <textarea id="context" rows="3" class="w-full p-2 border rounded"></textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-bold mb-1">The Question</label>
-                <input id="question" type="text" placeholder="What do you say?" class="w-full p-2 border rounded">
+
+            <div class="space-y-6">
+                <h2 class="font-bold border-b pb-2 text-stone-800 uppercase text-xs tracking-wider">The Three Choices</h2>
+                
+                <div id="choiceContainer" class="space-y-4">
+                    <div class="p-4 border border-stone-200 rounded-xl bg-stone-50 space-y-3">
+                        <div class="flex gap-2">
+                            <input placeholder="Label (The Logic)" class="w-2/3 p-2 text-xs border rounded choice-label">
+                            <input placeholder="ID (A1)" class="w-1/3 p-2 text-xs border rounded choice-id font-mono text-blue-600">
+                        </div>
+                        <textarea placeholder="The choice text..." class="w-full p-2 text-sm border rounded choice-text" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="p-4 border border-stone-200 rounded-xl bg-stone-50 space-y-3">
+                        <div class="flex gap-2">
+                            <input placeholder="Label" class="w-2/3 p-2 text-xs border rounded choice-label">
+                            <input placeholder="ID" class="w-1/3 p-2 text-xs border rounded choice-id font-mono text-blue-600">
+                        </div>
+                        <textarea placeholder="The choice text..." class="w-full p-2 text-sm border rounded choice-text" rows="2"></textarea>
+                    </div>
+
+                    <div class="p-4 border border-stone-200 rounded-xl bg-stone-50 space-y-3">
+                        <div class="flex gap-2">
+                            <input placeholder="Label" class="w-2/3 p-2 text-xs border rounded choice-label">
+                            <input placeholder="ID" class="w-1/3 p-2 text-xs border rounded choice-id font-mono text-blue-600">
+                        </div>
+                        <textarea placeholder="The choice text..." class="w-full p-2 text-sm border rounded choice-text" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <button onclick="generateCode()" class="w-full bg-black text-white py-4 rounded-xl font-bold hover:bg-stone-800 transition-all shadow-lg uppercase tracking-widest text-sm">
+                    Generate Snippet
+                </button>
             </div>
         </div>
 
-        <h3 class="font-bold mb-2">The Three Choices</h3>
-        <div id="choices" class="space-y-4">
-            <div class="p-4 bg-gray-50 rounded border">
-                <input placeholder="Label (e.g. The Bold)" class="w-full mb-2 p-1 text-sm border-b choice-label">
-                <input placeholder="Choice Text" class="w-full mb-2 p-1 font-bold border-b choice-text">
-                <input placeholder="Choice ID (e.g. A1-1)" class="w-full p-1 text-xs text-blue-600 choice-id">
+        <div class="bg-stone-900 p-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-stone-400 font-mono text-xs uppercase tracking-widest">Generated JavaScript</h3>
+                <button onclick="copyToClipboard()" class="text-white text-xs bg-stone-700 px-3 py-1 rounded hover:bg-stone-600">Copy Code</button>
             </div>
-            </div>
-
-        <button onclick="generateCode()" class="mt-6 w-full bg-black text-white py-3 rounded-lg font-bold">Generate JS Snippet</button>
-
-        <div class="mt-8">
-            <label class="block text-sm font-bold mb-1">Copy this into your dailyContent:</label>
-            <pre id="output" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-x-auto"></pre>
+            <pre id="output" class="text-green-400 font-mono text-sm overflow-x-auto whitespace-pre-wrap leading-relaxed">Your code will appear here...</pre>
         </div>
     </div>
 
     <script>
         function generateCode() {
-            const id = document.getElementById('parentId').value;
-            const day = document.getElementById('day').value;
+            const parentId = document.getElementById('parentId').value;
             const labels = document.querySelectorAll('.choice-label');
             const texts = document.querySelectorAll('.choice-text');
             const ids = document.querySelectorAll('.choice-id');
 
-            const snippet = `
-'${id}': {
-    title: "${document.getElementById('title').value}",
-    age: ${document.getElementById('age').value},
-    context: "${document.getElementById('context').value}",
-    question: "${document.getElementById('question').value}",
-    options: [
-        { id: '${ids[0].value}', label: "${labels[0].value}", text: "${texts[0].value}" },
-        { id: '${ids[1].value}', label: "${labels[1].value}", text: "${texts[1].value}" },
-        { id: '${ids[2].value}', label: "${labels[2].value}", text: "${texts[2].value}" }
-    ]
-},`;
+            const snippet = `            '${parentId}': {
+                title: "${document.getElementById('title').value}",
+                age: ${document.getElementById('age').value},
+                context: "${document.getElementById('context').value.replace(/\n/g, ' ')}",
+                question: "${document.getElementById('question').value}",
+                options: [
+                    { id: '${ids[0].value}', label: "${labels[0].value}", text: "${texts[0].value.replace(/\n/g, ' ')}" },
+                    { id: '${ids[1].value}', label: "${labels[1].value}", text: "${texts[1].value.replace(/\n/g, ' ')}" },
+                    { id: '${ids[2].value}', label: "${labels[2].value}", text: "${texts[2].value.replace(/\n/g, ' ')}" }
+                ]
+            },`;
+
             document.getElementById('output').innerText = snippet;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Copied! You can now paste this into your dailyContent object.");
         }
     </script>
 </body>
