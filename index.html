@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Death & the Vegan</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        body { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f8f8f8] text-[#1a1a1a]">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BookOpen, BarChart2, Info, ChevronRight, Clock, Heart, ShieldQuestion } = lucide;
+
+        const App = () => {
+            const [gameState, setGameState] = useState('landing');
+            const [history, setHistory] = useState([]);
+            const [currentDay, setCurrentDay] = useState(1);
+            const [margotAge, setMargotAge] = useState(4);
+            const [selectedChoice, setSelectedChoice] = useState(null);
+
+            // DATA STRUCTURE START
+            const dailyContent = {
+                1: {
+                    title: "The Wagon of Pigs",
+                    context: "Rural France, 1994. The air smells of lavender and diesel. You stand by the roadside with Grand-mère Sylvie, watching a wooden wagon rattle past.",
+                    question: "Margot points a small finger at the wagon and looks up at her grandmother.",
+                    options: [
+                        { id: 'A', label: "The Existential", text: "Are they going to see their mamas?", description: "A question of belonging." },
+                        { id: 'B', label: "The Practical", text: "Why are they crying so loudly?", description: "A question of distress." },
+                        { id: 'C', label: "The Empathetic", text: "Is there room for me in there?", description: "A question of identity." }
+                    ]
+                },
+                2: {
+                    'A': {
+                        title: "The Ghost of Memory",
+                        age: 5,
+                        context: "Grand-mère Sylvie’s hand tightened on yours. 'Everything goes home eventually,' she whispered. You spent that winter looking for things that were lost.",
+                        question: "A year later, you find a bird that has fallen from the nest. It is still.",
+                        options: [
+                            { id: 'A1', label: "Ritual", text: "Build a tiny grave." },
+                            { id: 'A2', label: "Logic", text: "Leave it for the cats." },
+                            { id: 'A3', label: "Denial", text: "Wrap it in your scarf." }
+                        ]
+                    },
+                    'B': {
+                        title: "The Weight of Truth",
+                        age: 5,
+                        context: "Grand-mère pulled you away. 'The world is hungry, petite.' She showed you how to peel a potato, the skin falling like damp paper.",
+                        question: "A mouse is caught in a trap. It is still alive. Grand-mère hands you a heavy boot.",
+                        options: [
+                            { id: 'B1', label: "Mercy", text: "Release it into the fields." },
+                            { id: 'B2', label: "Duty", text: "Finish the task." },
+                            { id: 'B3', label: "Refusal", text: "Run to your room." }
+                        ]
+                    },
+                    'C': {
+                        title: "The Shared Skin",
+                        age: 5,
+                        context: "Grand-mère laughed sadly. 'You have too much room in your heart.' You began to feel the shivers of others as your own.",
+                        question: "At school, a boy is teased for muddy shoes. You feel the heat in your own cheeks.",
+                        options: [
+                            { id: 'C1', label: "Solidarity", text: "Step into the mud." },
+                            { id: 'C2', label: "Defense", text: "Tell the others to be quiet." },
+                            { id: 'C3', label: "Observation", text: "Watch closely." }
+                        ]
+                    }
+                }
+            };
+            // DATA STRUCTURE END
+
+            const handleChoice = (id) => setSelectedChoice(id);
+
+            const advanceDay = () => {
+                if (!selectedChoice) return;
+                setHistory([...history, { day: currentDay, choice: selectedChoice }]);
+                setCurrentDay(currentDay + 1);
+                const nextAge = dailyContent[currentDay + 1]?.[selectedChoice]?.age || margotAge + 1;
+                setMargotAge(nextAge);
+                setSelectedChoice(null);
+                setGameState('story');
+            };
+
+            const currentPage = currentDay === 1 ? dailyContent[1] : dailyContent[currentDay][history[history.length-1].choice];
+
+            if (gameState === 'landing') {
+                return (
+                    <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
+                        <h1 className="text-5xl md:text-7xl font-bold mb-4">Death & the Vegan</h1>
+                        <p className="text-xl italic text-gray-600 mb-8">One choice every 24 hours. A lifetime of consequences.</p>
+                        <button onClick={() => setGameState('story')} className="px-12 py-4 bg-black text-white rounded-full font-bold flex items-center gap-2">
+                            Enter the Life of Margot <ChevronRight size={20} />
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="max-w-2xl mx-auto px-4 py-12">
+                    <header className="mb-12 flex justify-between items-center border-b pb-4">
+                        <span className="font-bold text-xl">D&V</span>
+                        <span className="font-sans text-xs uppercase tracking-widest text-gray-500">Day {currentDay} — Age {margotAge}</span>
+                    </header>
+                    <main className="space-y-10">
+                        <section className="space-y-6">
+                            <h2 className="text-3xl font-bold">{currentPage.title}</h2>
+                            <p className="text-xl leading-relaxed">{currentPage.context}</p>
+                            <div className="bg-white p-8 border italic text-lg text-gray-700">{currentPage.question}</div>
+                        </section>
+                        <section className="grid gap-4">
+                            {currentPage.options.map((opt) => (
+                                <button key={opt.id} onClick={() => handleChoice(opt.id)} className={`text-left p-6 rounded-xl border-2 transition-all ${selectedChoice === opt.id ? 'border-black bg-black text-white' : 'border-gray-200 bg-white'}`}>
+                                    <div className="text-xs font-sans uppercase mb-1 opacity-60">{opt.label}</div>
+                                    <div className="text-lg font-bold">{opt.text}</div>
+                                </button>
+                            ))}
+                        </section>
+                        {selectedChoice && (
+                            <button onClick={advanceDay} className="w-full bg-black text-white py-4 rounded-full font-bold">Confirm Choice</button>
+                        )}
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
