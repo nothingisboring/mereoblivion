@@ -8,20 +8,20 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-        body { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Playfair Display', serif; scroll-behavior: smooth; }
         .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#f8f8f8]">
+<body class="bg-[#f8f8f8] text-[#1a1a1a]">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
-
-        // Simple Icon Components (Replacing Lucide to prevent loading errors)
-        const ChevronRight = () => <span>→</span>;
+        const { useState, useEffect } = React;
 
         const App = () => {
             const [gameState, setGameState] = useState('landing');
@@ -30,119 +30,155 @@
             const [margotAge, setMargotAge] = useState(4);
             const [selectedChoice, setSelectedChoice] = useState(null);
 
+            // Re-syncing Lucide icons after every render
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
             const dailyContent = {
                 1: {
                     title: "The Wagon of Pigs",
-                    context: "Rural France, 1994. The air smells of lavender and diesel. You stand by the roadside with Grand-mère Sylvie.",
+                    context: "Rural France, 1994. The air smells of lavender and diesel. You stand by the roadside with Grand-mère Sylvie, watching a wooden wagon rattle past. Inside, pink snouts poke through the slats, and the squeals are high and sharp.",
                     question: "Margot points a small finger at the wagon and looks up at her grandmother.",
                     options: [
-                        { id: 'A', label: "The Existential", text: "Are they going to see their mamas?", description: "A question of belonging." },
-                        { id: 'B', label: "The Practical", text: "Why are they crying so loudly?", description: "A question of distress." },
-                        { id: 'C', label: "The Empathetic", text: "Is there room for me in there?", description: "A question of identity." }
+                        { id: 'A', label: "The Existential", text: "\"Are they going to see their mamas and papas?\"", description: "A question of family and belonging." },
+                        { id: 'B', label: "The Practical", text: "\"Why are they crying so loudly?\"", description: "A question of physical reality and distress." },
+                        { id: 'C', label: "The Empathetic", text: "\"Is there enough room for me in there too?\"", description: "A question of shared space and identity." }
                     ]
                 },
                 2: {
                     'A': {
                         title: "The Ghost of Memory",
                         age: 5,
-                        context: "Grand-mère Sylvie’s hand tightened on yours. 'Everything goes home eventually,' she whispered.",
-                        question: "A year later, you find a bird that has fallen from the nest. It is still.",
+                        context: "Grand-mère Sylvie’s hand tightened on yours. She didn't look at the pigs; she looked at the dust. 'Everything goes home eventually, Margot,' she whispered.",
+                        question: "A year later, you find a bird that has fallen from the nest. It is still. What do you do?",
                         options: [
-                            { id: 'A1', label: "Ritual", text: "Build a tiny grave." },
-                            { id: 'A2', label: "Logic", text: "Leave it for the cats." }
+                            { id: 'A1', label: "Ritual", text: "Build a tiny grave and speak to it." },
+                            { id: 'A2', label: "Logic", text: "Leave it for the cats; it is part of the garden now." },
+                            { id: 'A3', label: "Denial", text: "Wrap it in your scarf and wait for it to wake." }
                         ]
                     },
                     'B': {
                         title: "The Weight of Truth",
                         age: 5,
-                        context: "Grand-mère pulled you away. 'The world is hungry, petite.'",
-                        question: "A mouse is caught in a trap. It is still alive.",
+                        context: "Grand-mère pulled you away from the road. 'The world is hungry, petite. It is a noisy, hungry thing.' She took you home and showed you how to peel a potato.",
+                        question: "In the kitchen, a mouse is caught in a trap. It is still alive. Grand-mère hands you a heavy boot.",
                         options: [
-                            { id: 'B1', label: "Mercy", text: "Release it into the fields." },
-                            { id: 'B2', label: "Duty", text: "Finish the task." }
+                            { id: 'B1', label: "Mercy", text: "Release it into the fields far away." },
+                            { id: 'B2', label: "Duty", text: "Close your eyes and finish the task." },
+                            { id: 'B3', label: "Refusal", text: "Run to your room and lock the door." }
                         ]
                     },
                     'C': {
                         title: "The Shared Skin",
                         age: 5,
-                        context: "Grand-mère laughed sadly. 'You have too much room in your heart.'",
-                        question: "At school, a boy is teased for muddy shoes.",
+                        context: "Grand-mère laughed, but it was a dry, sad sound. 'You have too much room in your heart, Margot. It will get crowded.'",
+                        question: "At school, a boy is being teased for his muddy shoes. You feel the heat in your own cheeks.",
                         options: [
-                            { id: 'C1', label: "Solidarity", text: "Step into the mud." },
-                            { id: 'C2', label: "Defense", text: "Tell the others to be quiet." }
+                            { id: 'C1', label: "Solidarity", text: "Step into the mud so you are the same." },
+                            { id: 'C2', label: "Defense", text: "Tell the others to be quiet." },
+                            { id: 'C3', label: "Observation", text: "Watch closely, memorizing the shape of his sadness." }
                         ]
                     }
                 }
             };
 
             const advanceDay = () => {
-                const nextDay = currentDay + 1;
                 setHistory([...history, { day: currentDay, choice: selectedChoice }]);
-                setCurrentDay(nextDay);
-                
-                // Update age if defined in the content
-                const nextData = dailyContent[nextDay]?.[selectedChoice];
-                if (nextData?.age) setMargotAge(nextData.age);
-                
+                setCurrentDay(prev => prev + 1);
+                const nextAge = dailyContent[currentDay + 1]?.[selectedChoice]?.age || margotAge + 1;
+                setMargotAge(nextAge);
                 setSelectedChoice(null);
+                window.scrollTo(0,0);
             };
 
-            // GET CURRENT DATA - This is the "Safety" check
             const prevChoice = history.length > 0 ? history[history.length - 1].choice : null;
             const currentPage = currentDay === 1 ? dailyContent[1] : dailyContent[currentDay]?.[prevChoice];
 
-            // If we run out of story content, show this:
-            if (!currentPage && gameState !== 'landing') {
+            if (gameState === 'landing') {
                 return (
-                    <div className="flex flex-col items-center justify-center min-h-screen text-center p-10">
-                        <h2 className="text-3xl font-bold mb-4">To Be Continued...</h2>
-                        <p className="mb-8">The path for Day {currentDay} hasn't been written yet.</p>
-                        <button onClick={() => location.reload()} className="underline">Restart Journey</button>
+                    <div className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4 animate-fade-in">
+                        <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">Death & the Vegan</h1>
+                        <p className="text-xl font-serif italic text-gray-600 mb-8 max-w-lg">A daily life simulator. One choice every 24 hours. A lifetime of consequences.</p>
+                        <button onClick={() => setGameState('story')} className="px-12 py-4 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-all flex items-center gap-2">
+                            Enter the Life of Margot <i data-lucide="chevron-right"></i>
+                        </button>
+                        <div className="mt-12 flex gap-8 text-sm text-gray-500 uppercase tracking-widest font-sans">
+                            <div className="flex flex-col items-center"><i data-lucide="clock" className="mb-2 w-5"></i> Daily Reset</div>
+                            <div className="flex flex-col items-center"><i data-lucide="heart" className="mb-2 w-5"></i> Moral Weight</div>
+                            <div className="flex flex-col items-center"><i data-lucide="shield-question" className="mb-2 w-5"></i> 3 Unique Paths</div>
+                        </div>
                     </div>
                 );
             }
 
-            if (gameState === 'landing') {
-                return (
-                    <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
-                        <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">Death & the Vegan</h1>
-                        <p className="text-xl italic text-gray-600 mb-8 max-w-lg">One choice every 24 hours. A lifetime of consequences.</p>
-                        <button onClick={() => setGameState('story')} className="px-12 py-4 bg-black text-white rounded-full font-bold flex items-center gap-2">
-                            Enter the Life of Margot <ChevronRight />
-                        </button>
-                    </div>
-                );
+            if (!currentPage) {
+                return <div className="p-20 text-center font-sans">End of current narrative.</div>;
             }
 
             return (
-                <div className="max-w-2xl mx-auto px-4 py-12">
-                    <header className="mb-12 flex justify-between items-center border-b pb-4">
-                        <span className="font-bold text-xl">D&V</span>
-                        <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-gray-500">Day {currentDay} — Age {margotAge}</span>
+                <div className="min-h-screen">
+                    <header className="border-b border-gray-300 bg-white sticky top-0 z-10">
+                        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <button onClick={() => setGameState('landing')} className="font-bold text-xl tracking-tighter">D&V</button>
+                                <div className="h-4 w-px bg-gray-300"></div>
+                                <span className="text-xs font-sans font-bold uppercase tracking-widest text-gray-500">Day {currentDay} — Age {margotAge}</span>
+                            </div>
+                            <div className="flex items-center gap-6">
+                                <i data-lucide="bar-chart-2" className="w-5 cursor-pointer"></i>
+                                <i data-lucide="info" className="w-5 cursor-pointer"></i>
+                                <div className="bg-black text-white text-[10px] px-2 py-1 rounded font-sans font-bold uppercase">Archive</div>
+                            </div>
+                        </div>
                     </header>
-                    <main className="space-y-10">
+
+                    <main className="max-w-2xl mx-auto px-4 py-12 md:py-20 animate-fade-in">
                         <section className="space-y-6">
-                            <h2 className="text-3xl font-bold">{currentPage.title}</h2>
+                            <h2 className="text-3xl font-bold leading-tight">{currentPage.title}</h2>
                             <p className="text-xl leading-relaxed text-gray-800">{currentPage.context}</p>
-                            <div className="bg-white p-8 border border-gray-200 italic text-lg text-gray-700">{currentPage.question}</div>
+                            <div className="bg-white p-8 border border-gray-200 shadow-sm rounded-lg italic text-lg text-gray-700">
+                                {currentPage.question}
+                            </div>
                         </section>
-                        <section className="grid gap-4">
-                            {currentPage.options.map((opt) => (
-                                <button 
-                                    key={opt.id} 
-                                    onClick={() => setSelectedChoice(opt.id)} 
-                                    className={`text-left p-6 rounded-xl border-2 transition-all ${selectedChoice === opt.id ? 'border-black bg-black text-white' : 'border-gray-200 bg-white hover:border-gray-400'}`}
+
+                        <section className="grid gap-4 mt-10">
+                            {currentPage.options.map((option) => (
+                                <button
+                                    key={option.id}
+                                    onClick={() => setSelectedChoice(option.id)}
+                                    className={`group text-left p-6 rounded-xl border-2 transition-all duration-300 ${
+                                        selectedChoice === option.id ? 'border-black bg-black text-white scale-[1.02]' : 'border-gray-200 bg-white hover:border-gray-400'
+                                    } ${selectedChoice && selectedChoice !== option.id ? 'opacity-40 grayscale' : ''}`}
                                 >
-                                    <div className="text-xs font-sans font-bold uppercase mb-1 opacity-60">{opt.label}</div>
-                                    <div className="text-lg font-bold">{opt.text}</div>
+                                    <div className="flex justify-between items-start mb-1">
+                                        <span className={`text-xs font-sans font-bold uppercase tracking-widest ${selectedChoice === option.id ? 'text-gray-300' : 'text-gray-500'}`}>
+                                            {option.label}
+                                        </span>
+                                    </div>
+                                    <div className="text-lg font-bold">{option.text}</div>
+                                    {option.description && (
+                                        <div className={`text-sm mt-2 font-sans ${selectedChoice === option.id ? 'text-gray-400' : 'text-gray-500'}`}>
+                                            {option.description}
+                                        </div>
+                                    )}
                                 </button>
                             ))}
                         </section>
+
                         {selectedChoice && (
-                            <button onClick={advanceDay} className="w-full bg-black text-white py-4 rounded-full font-bold flex items-center justify-center gap-2">
-                                Confirm Choice <ChevronRight />
-                            </button>
+                            <div className="pt-8 animate-fade-in">
+                                <button onClick={advanceDay} className="w-full bg-black text-white py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2">
+                                    Confirm Choice & Live to Tomorrow <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
                         )}
+
+                        <footer className="py-20 border-t border-gray-200 mt-20 text-center">
+                            <p className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Your Journey</p>
+                            <div className="flex justify-center gap-2">
+                                {history.map((h, i) => <div key={i} className="w-8 h-1 bg-black rounded-full"></div>)}
+                                <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
+                            </div>
+                        </footer>
                     </main>
                 </div>
             );
