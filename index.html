@@ -112,8 +112,9 @@
                 { id: 'B1-1', label: "The Poetic", text: "You feel that even if true, maths would be a poor language to learn, as it renders beautiful things as mere calculation." },
                 { id: 'C1-1', label: "The Skeptic", text: "You smile inside at the ridiculous idea. As if." }
             ]
-        }
-    }; // <-- Close Day 3
+        }// <-- Close Day 3
+    }
+    };
             const advanceDay = () => {
                 setHistory([...history, { day: currentDay, choice: selectedChoice }]);
                 setCurrentDay(prev => prev + 1);
