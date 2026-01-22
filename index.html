@@ -79,7 +79,6 @@
                         ]
                     }
                 },
-                }, // <-- Notice this comma
     3: { // <-- NEW: You must wrap Day 3 choices in this number block
         'A1': {
             title: "The Greenhouse",
@@ -114,9 +113,7 @@
                 { id: 'C1-1', label: "The Skeptic", text: "You smile inside at the ridiculous idea. As if." }
             ]
         }
-    } // <-- Close Day 3
-            };
-
+    }; // <-- Close Day 3
             const advanceDay = () => {
                 setHistory([...history, { day: currentDay, choice: selectedChoice }]);
                 setCurrentDay(prev => prev + 1);
