@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D&V Narrative Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body { background: #f4f4f5; font-family: sans-serif; }</style>
+</head>
+<body class="p-8">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold mb-6">D&V Content Generator</h1>
+        
+        <div class="grid gap-4 mb-8">
+            <div>
+                <label class="block text-sm font-bold mb-1">Parent Choice ID (e.g., A1 or B3)</label>
+                <input id="parentId" type="text" placeholder="Which choice leads to this?" class="w-full p-2 border rounded">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold mb-1">Target Day</label>
+                    <input id="day" type="number" value="3" class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-1">Margot's Age</label>
+                    <input id="age" type="number" value="12" class="w-full p-2 border rounded">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1">Chapter Title</label>
+                <input id="title" type="text" placeholder="The Glass House" class="w-full p-2 border rounded">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1">Context / Story Text</label>
+                <textarea id="context" rows="3" class="w-full p-2 border rounded"></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1">The Question</label>
+                <input id="question" type="text" placeholder="What do you say?" class="w-full p-2 border rounded">
+            </div>
+        </div>
+
+        <h3 class="font-bold mb-2">The Three Choices</h3>
+        <div id="choices" class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded border">
+                <input placeholder="Label (e.g. The Bold)" class="w-full mb-2 p-1 text-sm border-b choice-label">
+                <input placeholder="Choice Text" class="w-full mb-2 p-1 font-bold border-b choice-text">
+                <input placeholder="Choice ID (e.g. A1-1)" class="w-full p-1 text-xs text-blue-600 choice-id">
+            </div>
+            </div>
+
+        <button onclick="generateCode()" class="mt-6 w-full bg-black text-white py-3 rounded-lg font-bold">Generate JS Snippet</button>
+
+        <div class="mt-8">
+            <label class="block text-sm font-bold mb-1">Copy this into your dailyContent:</label>
+            <pre id="output" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-x-auto"></pre>
+        </div>
+    </div>
+
+    <script>
+        function generateCode() {
+            const id = document.getElementById('parentId').value;
+            const day = document.getElementById('day').value;
+            const labels = document.querySelectorAll('.choice-label');
+            const texts = document.querySelectorAll('.choice-text');
+            const ids = document.querySelectorAll('.choice-id');
+
+            const snippet = `
+'${id}': {
+    title: "${document.getElementById('title').value}",
+    age: ${document.getElementById('age').value},
+    context: "${document.getElementById('context').value}",
+    question: "${document.getElementById('question').value}",
+    options: [
+        { id: '${ids[0].value}', label: "${labels[0].value}", text: "${texts[0].value}" },
+        { id: '${ids[1].value}', label: "${labels[1].value}", text: "${texts[1].value}" },
+        { id: '${ids[2].value}', label: "${labels[2].value}", text: "${texts[2].value}" }
+    ]
+},`;
+            document.getElementById('output').innerText = snippet;
+        }
+    </script>
+</body>
+</html>
